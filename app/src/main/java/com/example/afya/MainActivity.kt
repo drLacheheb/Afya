@@ -36,62 +36,61 @@ class MainActivity : ComponentActivity() {
         setContent {
             AfyaTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "drLacheheb!",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                    //FirstUI(modifier = Modifier.padding(innerPadding))
+                    FirstUI(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
 /**
  * Main composable function for the UI layout
- * @param modifier Modifier for layout adjustments
  */
 @Composable
 fun FirstUI(modifier: Modifier = Modifier) {
-    // TODO 1: Create state variables for text input and items list
+    // 🔹 1. إنشاء متغيرات الحالة
+    var textValue by remember { mutableStateOf("") }
+    val allItems = remember { mutableStateListOf<String>() }
+    var searchQuery by remember { mutableStateOf("") }
 
     Column(
         modifier = modifier
             .padding(25.dp)
             .fillMaxSize()
     ) {
+        // 🔹 2. تمرير القيم إلى `SearchInputBar`
         SearchInputBar(
-            textValue = "", // TODO 2: Connect to state
-            onTextValueChange = { /* TODO 3: Update text state */ },
-            onAddItem = { /* TODO 4: Add item to list */ },
-            onSearch = { /* TODO 5: Implement search functionality */ }
+            textValue = textValue,
+            onTextValueChange = { textValue = it },
+            onAddItem = {
+                if (textValue.isNotBlank()) {
+                    allItems.add(textValue)
+                    textValue = "" // إعادة ضبط الإدخال بعد الإضافة
+                }
+            },
+            onSearch = { query -> searchQuery = query }
         )
 
-        // TODO 6: Display list of items using CardsList composable
-        CardsList(emptyList())
+        // 🔹 3. تصفية العناصر بناءً على البحث
+        val displayedItems = if (searchQuery.isEmpty()) {
+            allItems
+        } else {
+            allItems.filter { it.contains(searchQuery, ignoreCase = true) }
+        }
+
+        // 🔹 4. تمرير العناصر إلى `CardsList`
+        CardsList(displayedItems = displayedItems)
     }
 }
 
 /**
  * Composable for search and input controls
- * @param textValue Current value of the input field
- * @param onTextValueChange Callback for text changes
- * @param onAddItem Callback for adding new items
- * @param onSearch Callback for performing search
  */
 @Composable
 fun SearchInputBar(
     textValue: String,
     onTextValueChange: (String) -> Unit,
-    onAddItem: (String) -> Unit,
+    onAddItem: () -> Unit,
     onSearch: (String) -> Unit
 ) {
     Column {
@@ -108,11 +107,11 @@ fun SearchInputBar(
                 .padding(vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Button(onClick = { /* TODO 7: Handle add button click */ }) {
+            Button(onClick = onAddItem) {
                 Text("Add")
             }
 
-            Button(onClick = { /* TODO 8: Handle search button click */ }) {
+            Button(onClick = { onSearch(textValue) }) {
                 Text("Search")
             }
         }
@@ -121,13 +120,10 @@ fun SearchInputBar(
 
 /**
  * Composable for displaying a list of items in cards
- * @param displayedItems List of items to display
  */
 @Composable
 fun CardsList(displayedItems: List<String>) {
-    // TODO 9: Implement LazyColumn to display items
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        // TODO 10: Create cards for each item in the list
         items(displayedItems) { item ->
             Card(
                 modifier = Modifier
@@ -135,7 +131,7 @@ fun CardsList(displayedItems: List<String>) {
                     .padding(vertical = 4.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
-                Text(text = "Sample Item", modifier = Modifier.padding(16.dp))
+                Text(text = item, modifier = Modifier.padding(16.dp))
             }
         }
     }
