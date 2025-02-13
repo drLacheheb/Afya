@@ -107,6 +107,7 @@ private fun PostList(
                             Text(text = post.title, style = MaterialTheme.typography.titleMedium)
                             Text(text = post.content, style = MaterialTheme.typography.bodyMedium)
                             Text("Drug: ${post.drugName}", style = MaterialTheme.typography.labelMedium)
+                            Text("Post type: ${post.postType}", style = MaterialTheme.typography.labelMedium)
                             Text("Location: ${post.location}", style = MaterialTheme.typography.labelMedium)
                         }
                     }
