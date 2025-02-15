@@ -1,120 +1,117 @@
-# Afya App Exercise
 
-## Objective
-Complete the implementation of a simple list management app with search functionality using Jetpack Compose.
+package com.example.afya
 
-## Key Concepts
-- State management in Jetpack Compose
-- LazyColumn for efficient lists
-- Composable function structure
-- Material Design 3 components
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.afya.ui.theme.AfyaTheme
 
-## Code Structure
-
-### 1. State Management (MainActivity.kt)
-- `FirstUI`: Main composable containing app logic
-- `SearchInputBar`: Handles user input and actions
-- `CardsList`: Displays items in a scrollable list
-
-### 2. Theme Configuration
-- `Color.kt`: Custom color definitions
-- `Theme.kt`: Light/dark theme configuration
-- `Type.kt`: Typography settings
-
-## Exercise Tasks
-
-### Part 1: State Management
-1. Create state variables for:
-    - Text input field value
-    - List of items
-    - Search query
-
-2. Connect the TextField to the text state variable
-
-### Part 2: Add Functionality
-3. Implement the "Add" button to:
-    - Add non-empty text to the list
-    - Clear the input field after adding
-
-4. Implement the "Search" button to:
-    - Filter items containing the search query (case-insensitive)
-    - Show all items when search is empty
-
-### Part 3: List Display
-5. Complete the `CardsList` composable to:
-    - Display actual items from the list
-    - Use `LazyColumn` for efficient scrolling
-    - Show each item in a Material Design Card
-
-### Part 4: Bonus Challenges
-6. Add validation to prevent empty items
-7. Implement real-time search (without button)
-8. Add delete functionality for items
-9. Add error message for no search results
-
-## Implementation Steps
-
-### 1. State Variables
-```kotlin
-// In FirstUI composable
-var textValue by remember { mutableStateOf("") }
-val allItems = remember { mutableStateListOf<String>() }
-var searchQuery by remember { mutableStateOf("") }
-```
-
-### 2. Filter Logic
-```kotlin
-val displayedItems = if (searchQuery.isEmpty()) {
-    allItems
-} else {
-    allItems.filter { it.contains(searchQuery, ignoreCase = true) }
-}
-```
-
-### 3. Button Handlers
-```kotlin
-// Add button
-if (textValue.isNotBlank()) {
-    allItems.add(textValue)
-    textValue = ""
-}
-
-// Search button
-searchQuery = textValue
-```
-
-### 4. LazyColumn Implementation
-```kotlin
-items(displayedItems) { item ->
-    Card(...) {
-        Text(text = item, ...)
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            AfyaTheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    FirstUI(modifier = Modifier.padding(innerPadding))
+                }
+            }
+        }
     }
 }
-```
 
-## Expected Outcome
-A functional app that:
-- Allows adding text items to a list
-- Displays items in beautiful Material cards
-- Supports searching through items
-- Maintains state across configuration changes
+@Composable
+fun FirstUI(modifier: Modifier = Modifier) {
+    var textValue by remember { mutableStateOf("") }
+    val itemsList = remember { mutableStateListOf<String>() }
+    var filteredList by remember { mutableStateOf(itemsList.toList()) }
 
-## Sample Screenshot
+    Column(
+        modifier = modifier
+            .padding(25.dp)
+            .fillMaxSize()
+    ) {
+        SearchInputBar(
+            textValue = textValue,
+            onTextValueChange = { textValue = it },
+            onAddItem = {
+                if (it.isNotBlank()) {
+                    itemsList.add(it)
+                    filteredList = itemsList.toList()
+                    textValue = ""
+                }
+            },
+            onSearch = {
+                filteredList = if (it.isBlank()) itemsList.toList()
+                else itemsList.filter { item -> item.contains(it, ignoreCase = true) }
+            }
+        )
 
-Include a screenshot of the final app interface showing a list with search functionality.
+        CardsList(filteredList)
+    }
+}
 
----
+@Composable
+fun SearchInputBar(
+    textValue: String,
+    onTextValueChange: (String) -> Unit,
+    onAddItem: (String) -> Unit,
+    onSearch: (String) -> Unit
+) {
+    Column {
+        TextField(
+            value = textValue,
+            onValueChange = onTextValueChange,
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = { Text("Enter text...") }
+        )
 
-This setup provides students with:
-1. A working app skeleton with missing core functionality
-2. Clear TODO markers for implementation points
-3. A structured README with implementation guidance
-4. Bonus challenges for advanced students
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Button(onClick = { onAddItem(textValue) }) {
+                Text("Add")
+            }
 
-The exercise focuses on key Jetpack Compose concepts:
-- State management with `mutableStateOf`
-- Composable function composition
-- List handling with `LazyColumn`
-- Material Design component usage
-- Basic user input handling
+            Button(onClick = { onSearch(textValue) }) {
+                Text("Search")
+            }
+        }
+    }
+}
 
+@Composable
+fun CardsList(displayedItems: List<String>) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        items(displayedItems) { item ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                Text(text = item, modifier = Modifier.padding(16.dp))
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewFirstUI() {
+    AfyaTheme {
+        FirstUI()
+    }
+}
