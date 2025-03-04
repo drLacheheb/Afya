@@ -15,7 +15,7 @@ data class Post(
     val expiredAt: Date
 )
 
-enum class PostType {
-    OFFER,
-    REQUEST
-}
+//enum class PostType {
+//    OFFER,
+//    REQUEST
+//}
