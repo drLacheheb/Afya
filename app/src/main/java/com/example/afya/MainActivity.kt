@@ -1,4 +1,4 @@
-package com.example.afya2
+package com.example.afya
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,6 +18,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 
 @Composable
 fun MainScreen() {
@@ -172,8 +178,16 @@ fun BottomNavItem(name: String, iconRes: Int, selectedItem: String, onSelect: (S
             tint = if (isSelected) Color.White else Color.Black
         ) } }
 
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            MainScreen() 
+        }
+    }
+}
 @Preview(showBackground = true)
 @Composable
-fun PreviewMainScreen() {
+fun PreviewApp() {
     MainScreen()
 }
