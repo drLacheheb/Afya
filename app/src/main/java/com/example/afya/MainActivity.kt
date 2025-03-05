@@ -36,23 +36,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             AfyaTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "drLacheheb!",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                    //FirstUI(modifier = Modifier.padding(innerPadding))
+                    FirstUI(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
     }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
 }
 
 /**
@@ -61,7 +49,17 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
  */
 @Composable
 fun FirstUI(modifier: Modifier = Modifier) {
-    // TODO 1: Create state variables for text input and items list
+    // State variables for text input and items list
+    var text by remember { mutableStateOf("") }
+    val items = remember { mutableStateListOf<String>() }
+    var searchQuery by remember { mutableStateOf("") }
+
+    // Filter items based on the search query
+    val displayedItems = if (searchQuery.isEmpty()) {
+        items
+    } else {
+        items.filter { it.contains(searchQuery, ignoreCase = true) }
+    }
 
     Column(
         modifier = modifier
@@ -69,14 +67,21 @@ fun FirstUI(modifier: Modifier = Modifier) {
             .fillMaxSize()
     ) {
         SearchInputBar(
-            textValue = "", // TODO 2: Connect to state
-            onTextValueChange = { /* TODO 3: Update text state */ },
-            onAddItem = { /* TODO 4: Add item to list */ },
-            onSearch = { /* TODO 5: Implement search functionality */ }
+            textValue = text, // Connect text to state
+            onTextValueChange = { newText -> text = newText }, // Update text state
+            onAddItem = {
+                if (text.isNotBlank()) {
+                    items.add(text) // Add text to list
+                    text = "" // Clear text after adding
+                }
+            },
+            onSearch = { query ->
+                searchQuery = query // Update search query
+            }
         )
 
-        // TODO 6: Display list of items using CardsList composable
-        CardsList(emptyList())
+        // Display list of items using CardsList composable
+        CardsList(displayedItems = displayedItems)
     }
 }
 
@@ -108,11 +113,11 @@ fun SearchInputBar(
                 .padding(vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Button(onClick = { /* TODO 7: Handle add button click */ }) {
+            Button(onClick = { onAddItem(textValue) }) {
                 Text("Add")
             }
 
-            Button(onClick = { /* TODO 8: Handle search button click */ }) {
+            Button(onClick = { onSearch(textValue) }) {
                 Text("Search")
             }
         }
@@ -125,9 +130,7 @@ fun SearchInputBar(
  */
 @Composable
 fun CardsList(displayedItems: List<String>) {
-    // TODO 9: Implement LazyColumn to display items
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        // TODO 10: Create cards for each item in the list
         items(displayedItems) { item ->
             Card(
                 modifier = Modifier
@@ -135,8 +138,16 @@ fun CardsList(displayedItems: List<String>) {
                     .padding(vertical = 4.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
-                Text(text = "Sample Item", modifier = Modifier.padding(16.dp))
+                Text(text = item, modifier = Modifier.padding(16.dp))
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun FirstUIPreview() {
+    AfyaTheme {
+        FirstUI()
     }
 }
