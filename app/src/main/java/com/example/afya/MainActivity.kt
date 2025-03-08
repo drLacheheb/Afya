@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
                         name = "drLacheheb!",
                         modifier = Modifier.padding(innerPadding)
                     )
-                    //FirstUI(modifier = Modifier.padding(innerPadding))
+                    FirstUI(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -61,7 +61,9 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
  */
 @Composable
 fun FirstUI(modifier: Modifier = Modifier) {
-    // TODO 1: Create state variables for text input and items list
+    var textState by remember { mutableStateOf("") }
+    val itemsList = remember { mutableStateListOf<String>() }
+    var filteredList by remember { mutableStateOf(itemsList.toList()) }
 
     Column(
         modifier = modifier
@@ -69,14 +71,19 @@ fun FirstUI(modifier: Modifier = Modifier) {
             .fillMaxSize()
     ) {
         SearchInputBar(
-            textValue = "", // TODO 2: Connect to state
-            onTextValueChange = { /* TODO 3: Update text state */ },
-            onAddItem = { /* TODO 4: Add item to list */ },
-            onSearch = { /* TODO 5: Implement search functionality */ }
+            textValue = textState,
+            onTextValueChange = { textState = it },
+            onAddItem = {
+                itemsList.add(it)
+                filteredList = itemsList.toList()
+                        },
+            onSearch = { query ->
+                filteredList = itemsList.filter { it.contains(query, ignoreCase = true) }
+            }
         )
 
         // TODO 6: Display list of items using CardsList composable
-        CardsList(emptyList())
+        CardsList(filteredList)
     }
 }
 
@@ -108,11 +115,17 @@ fun SearchInputBar(
                 .padding(vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Button(onClick = { /* TODO 7: Handle add button click */ }) {
+            Button(onClick = {
+                if (textValue.isNotBlank()) {
+                    onAddItem(textValue)
+                    onTextValueChange("")
+            }}) {
                 Text("Add")
             }
 
-            Button(onClick = { /* TODO 8: Handle search button click */ }) {
+            Button(onClick = {
+                onSearch(textValue)
+            }) {
                 Text("Search")
             }
         }
@@ -135,7 +148,7 @@ fun CardsList(displayedItems: List<String>) {
                     .padding(vertical = 4.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
-                Text(text = "Sample Item", modifier = Modifier.padding(16.dp))
+                Text(text = item, modifier = Modifier.padding(16.dp))
             }
         }
     }
