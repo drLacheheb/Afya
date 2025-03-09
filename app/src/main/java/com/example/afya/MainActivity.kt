@@ -1,5 +1,4 @@
 package com.example.afya
-
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -28,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.afya.ui.theme.AfyaTheme
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,57 +34,40 @@ class MainActivity : ComponentActivity() {
         setContent {
             AfyaTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "drLacheheb!",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                    //FirstUI(modifier = Modifier.padding(innerPadding))
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-/**
- * Main composable function for the UI layout
- * @param modifier Modifier for layout adjustments
- */
+                    FirstUI(modifier = Modifier.padding(innerPadding))
+                } } } } }
 @Composable
 fun FirstUI(modifier: Modifier = Modifier) {
-    // TODO 1: Create state variables for text input and items list
+    // State variables for text input and items list
+    var text by remember { mutableStateOf("") }
+    val items = remember { mutableStateListOf<String>() }
+    var searchQuery by remember { mutableStateOf("") }
 
+    val displayedItems = if (searchQuery.isEmpty()) {
+        items
+    } else {
+        items.filter { it.contains(searchQuery, ignoreCase = true) }
+    }
     Column(
         modifier = modifier
             .padding(25.dp)
             .fillMaxSize()
     ) {
         SearchInputBar(
-            textValue = "", // TODO 2: Connect to state
-            onTextValueChange = { /* TODO 3: Update text state */ },
-            onAddItem = { /* TODO 4: Add item to list */ },
-            onSearch = { /* TODO 5: Implement search functionality */ }
-        )
-
-        // TODO 6: Display list of items using CardsList composable
-        CardsList(emptyList())
+            textValue = text,
+            onTextValueChange = { newText -> text = newText },
+            onAddItem = {
+                if (text.isNotBlank()) {
+                    items.add(text)
+                    text = ""
+                }
+            },
+            onSearch = { query ->
+                searchQuery = query
+            })
+        CardsList(displayedItems = displayedItems)
     }
 }
-
-/**
- * Composable for search and input controls
- * @param textValue Current value of the input field
- * @param onTextValueChange Callback for text changes
- * @param onAddItem Callback for adding new items
- * @param onSearch Callback for performing search
- */
 @Composable
 fun SearchInputBar(
     textValue: String,
@@ -108,26 +89,16 @@ fun SearchInputBar(
                 .padding(vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Button(onClick = { /* TODO 7: Handle add button click */ }) {
+            Button(onClick = { onAddItem(textValue) }) {
                 Text("Add")
             }
 
-            Button(onClick = { /* TODO 8: Handle search button click */ }) {
+            Button(onClick = { onSearch(textValue) }) {
                 Text("Search")
-            }
-        }
-    }
-}
-
-/**
- * Composable for displaying a list of items in cards
- * @param displayedItems List of items to display
- */
+            } } } }
 @Composable
 fun CardsList(displayedItems: List<String>) {
-    // TODO 9: Implement LazyColumn to display items
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        // TODO 10: Create cards for each item in the list
         items(displayedItems) { item ->
             Card(
                 modifier = Modifier
@@ -135,8 +106,13 @@ fun CardsList(displayedItems: List<String>) {
                     .padding(vertical = 4.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
-                Text(text = "Sample Item", modifier = Modifier.padding(16.dp))
-            }
-        }
+                Text(text = item, modifier = Modifier.padding(16.dp))
+            } } } }
+
+@Preview(showBackground = true)
+@Composable
+fun FirstUIPreview() {
+    AfyaTheme {
+        FirstUI()
     }
 }
