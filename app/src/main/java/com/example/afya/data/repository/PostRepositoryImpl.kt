@@ -1,13 +1,11 @@
-package com.example.afya.data.repository
+package com.example.afya.repository
 
-import com.example.afya.data.model.Post
-import com.example.afya.data.model.PostType
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import com.example.afya.model.Post
+import com.example.afya.model.PostType
 import java.util.Date
 
-class PostRepositoryImpl : PostRepository {
-    private val _posts = mutableListOf(
+object PostRepository {
+    private val posts = listOf(
         Post(
             id = "1",
             title = "Extra Painkillers",
@@ -18,7 +16,7 @@ class PostRepositoryImpl : PostRepository {
             postType = PostType.OFFER,
             createdAt = Date(),
             updatedAt = Date(),
-            expiredAt = Date(System.currentTimeMillis() + 86400000)
+
         ),
         Post(
             id = "2",
@@ -30,31 +28,31 @@ class PostRepositoryImpl : PostRepository {
             postType = PostType.REQUEST,
             createdAt = Date(),
             updatedAt = Date(),
-            expiredAt = Date(System.currentTimeMillis() + 172800000)
+
         ),
         Post(
             id = "3",
             title = "Extra Vitamins",
             content = "I have extra vitamin C tablets",
             drugName = "Vitamin C",
-            image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiqPbXCwK9Q1pHzd0pqnv3V-Oyge5dC1ZI6mAZW6PL6gG0b95OsKMLSvFv_rvU-hciuzg&usqp=CAU\n",
+            image = "https://images.unsplash.com/photo-1620916297394-9b5e3d7e7f9b?w=400",
             location = "Constantine",
             postType = PostType.OFFER,
             createdAt = Date(),
             updatedAt = Date(),
-            expiredAt = Date(System.currentTimeMillis() + 86400000)
+
         ),
         Post(
             id = "4",
             title = "Looking for Antibiotics",
             content = "Urgently need antibiotics",
             drugName = "Amoxicillin",
-            image = "https://www.center4research.org/wp-content/uploads/2016/06/shutterstock_504085291-scaled.jpg\n",
+            image = "https://images.unsplash.com/photo-1599458252573-56ae36120de1?w=400",
             location = "Annaba",
             postType = PostType.REQUEST,
             createdAt = Date(),
             updatedAt = Date(),
-            expiredAt = Date(System.currentTimeMillis() + 172800000)
+
         ),
         Post(
             id = "5",
@@ -66,32 +64,23 @@ class PostRepositoryImpl : PostRepository {
             postType = PostType.OFFER,
             createdAt = Date(),
             updatedAt = Date(),
-            expiredAt = Date(System.currentTimeMillis() + 86400000)
+
         ),
         Post(
             id = "6",
             title = "Looking for Medication",
             content = "Urgently need medication for high blood pressure",
             drugName = "Amlodipine",
-            image = "https://cdn-prod.medicalnewstoday.com/content/images/articles/321/321194/bottles-of-pills-with-a-stethoscope-and-blood-pressure-meter.jpg\n",
+            image = "https://images.unsplash.com/photo-1620916297394-9b5e3d7e7f9b?w=400",
             location = "Tlemcen",
             postType = PostType.REQUEST,
             createdAt = Date(),
             updatedAt = Date(),
-            expiredAt = Date(System.currentTimeMillis() + 172800000)
+
         )
     )
 
-    private val _postFlow = MutableSharedFlow<List<Post>>(replay = 1)
-
-    init {
-        _postFlow.tryEmit(_posts.toList())
-    }
-
-    override fun getPosts(): Flow<List<Post>> = _postFlow
-
-    override suspend fun addPost(post: Post) {
-        _posts.add(post)
-        _postFlow.emit(_posts.toList())
+    fun getPosts(): List<Post> {
+        return posts.sortedByDescending { it.createdAt }
     }
 }

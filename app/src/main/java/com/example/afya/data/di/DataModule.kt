@@ -4,6 +4,7 @@ import com.example.afya.data.repository.DrugRepository
 import com.example.afya.data.repository.DrugRepositoryImpl
 import com.example.afya.data.repository.PostRepository
 import com.example.afya.data.repository.PostRepositoryImpl
+import com.example.afya.domain.usecase.AddPostUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

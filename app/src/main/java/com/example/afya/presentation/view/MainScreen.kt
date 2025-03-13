@@ -29,6 +29,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.NavHostController
 
 
 sealed class Screen(val route: String) {
@@ -44,6 +45,7 @@ sealed class Screen(val route: String) {
 fun MainScreen(
     postViewModel: PostViewModel,
     drugViewModel: DrugViewModel,
+    navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     val posts by postViewModel.uiState.collectAsState()
@@ -122,7 +124,7 @@ fun MainScreen(
             when (currentScreen) {
                 is Screen.Posts -> PostList(
                     posts = posts.posts,
-                    onAddPost = { /* ضع الأكشن المناسب عند الضغط */ }
+                    onAddPost = { navController.navigate("add_post") } // ✅ التنقل عند الضغط
                 )
                 is Screen.Drugs -> DrugList(
                     drugs = drugs.drugs,
@@ -331,21 +333,29 @@ fun DrugCard(drug: Drug) {
 
 
 @Composable
-fun PostList(posts: List<Post>, onAddPost: () -> Unit, modifier: Modifier = Modifier) {
-    Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
-        // زر إضافة منشور جديد
+fun PostList(
+    posts: List<Post>,
+    onAddPost: () -> Unit, // ✅ تمرير الإجراء عند الضغط على إضافة منشور
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        // ✅ زر إضافة منشور جديد
         Button(
-            onClick = onAddPost,
+            onClick = onAddPost, // ✅ التنقل إلى شاشة إضافة المنشور
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
         ) {
-            Icon(Icons.Default.Add, contentDescription = "Add Post")
+            Icon(Icons.Default.Add, contentDescription = "Add post")
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Add Post")
+            Text("Add post", style = MaterialTheme.typography.titleMedium)
         }
 
-        // قائمة المنشورات
+        // ✅ قائمة المنشورات
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -443,4 +453,3 @@ fun PostCard(post: Post) {
         }
     }
 }
-

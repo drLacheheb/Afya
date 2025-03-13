@@ -38,3 +38,8 @@ class DrugViewModel @Inject constructor(private val getDrugsUseCase: GetDrugsUse
         }
     }
 }
+
+
+
+
+

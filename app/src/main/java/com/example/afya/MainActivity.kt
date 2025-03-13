@@ -15,7 +15,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -29,10 +31,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.afya.ui.theme.AfyaTheme
 import com.example.afya.presentation.view.MainScreen
 import com.example.afya.presentation.viewmodel.DrugViewModel
 import com.example.afya.presentation.viewmodel.PostViewModel
+import com.example.afya.ui.screens.AddPostScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -47,13 +54,40 @@ class MainActivity : ComponentActivity() {
                     val postViewModel = hiltViewModel<PostViewModel>()
                     val drugViewModel = hiltViewModel<DrugViewModel>()
 
-                    MainScreen(
-                        postViewModel,
-                        drugViewModel,
+                    val navController = rememberNavController()
+                    AfyaNavHost(
+                        navController = navController,
+                        postViewModel = postViewModel,
+                        drugViewModel = drugViewModel,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun AfyaNavHost(
+    navController: NavHostController,
+    postViewModel: PostViewModel,
+    drugViewModel: DrugViewModel,
+    modifier: Modifier = Modifier
+) {
+    NavHost(
+        navController = navController,
+        startDestination = "main_screen",
+        modifier = modifier
+    ) {
+        composable("main_screen") {
+            MainScreen(
+                postViewModel = postViewModel,
+                drugViewModel = drugViewModel,
+                navController = navController
+            )
+        }
+        composable("add_post") {
+            AddPostScreen(navController = navController)
         }
     }
 }

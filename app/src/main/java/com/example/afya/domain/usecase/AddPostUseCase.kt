@@ -8,4 +8,5 @@ class AddPostUseCase @Inject constructor(private val postRepository: PostReposit
 
     suspend operator fun invoke(post: Post) = postRepository.addPost(post)
 
+
 }
