@@ -6,3 +6,4 @@ data class Drug(
     val details: String,
     val image: String?,
 )
+

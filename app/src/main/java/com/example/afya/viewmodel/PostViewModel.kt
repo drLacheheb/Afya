@@ -19,8 +19,8 @@ data class UIState(
 )
 
 class PostViewModel : ViewModel() {
-   
- 
+
+
     private val _uiState = MutableStateFlow(UIState())
     val uiState: StateFlow<UIState> = _uiState.asStateFlow()
 
@@ -30,7 +30,7 @@ class PostViewModel : ViewModel() {
 
 
     fun loadPosts() {
-     
+
         _uiState.value = _uiState.value.copy(isLoading = true)
         viewModelScope.launch {
             try {
@@ -48,6 +48,5 @@ class PostViewModel : ViewModel() {
             }
         }
     }
-        
-}
 
+}

@@ -264,6 +264,7 @@ fun DrugList(drugs: List<Drug>, onAddDrug: () -> Unit, modifier: Modifier = Modi
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
+
         ) {
             Icon(Icons.Default.Add, contentDescription = "Add informations about a drug")
             Spacer(modifier = Modifier.width(8.dp))
@@ -326,6 +327,70 @@ fun DrugCard(drug: Drug) {
             )
             Spacer(modifier = Modifier.height(12.dp))
         }
+
+        ) {
+            Icon(Icons.Default.Add, contentDescription = "Add informations about a drug")
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Add informations about a drug")
+        }
+
+        // قائمة الأدوية
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            items(drugs) { drug ->
+                DrugCard(drug)
+            }
+        }
+    }
+}
+
+// بطاقة عرض تفاصيل الدواء
+@Composable
+fun DrugCard(drug: Drug) {
+    var showContactOptions by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.medium),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // صورة الدواء
+            AsyncImage(
+                model = drug.image,
+                contentDescription = "Drug Image",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(180.dp)
+                    .clip(MaterialTheme.shapes.medium)
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // اسم الدواء
+            Text(
+                text = drug.name,
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.primary,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // تفاصيل الدواء
+            Text(
+                text = drug.details,
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+        }
+
     }
 }
 
@@ -400,6 +465,7 @@ fun PostCard(post: Post) {
                     )
                 }
             }
+
 
             // عنوان المنشور
             Text(

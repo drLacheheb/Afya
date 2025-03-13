@@ -1,5 +1,5 @@
 [versions]
-agp = "8.8.0"
+agp = "8.8.2"
 kotlin = "2.0.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -8,6 +8,9 @@ espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.0"
 composeBom = "2024.04.01"
+datastoreCoreAndroid = "1.1.2"
+datastoreCoreJvm = "1.1.2"
+generativeai = "0.9.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -27,6 +30,9 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 io-coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version = "2.4.0" }
+androidx-datastore-core-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastoreCoreAndroid" }
+androidx-datastore-core-jvm = { group = "androidx.datastore", name = "datastore-core-jvm", version.ref = "datastoreCoreJvm" }
+generativeai = { group = "com.google.ai.client.generativeai", name = "generativeai", version.ref = "generativeai" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
