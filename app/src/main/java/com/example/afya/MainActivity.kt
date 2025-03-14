@@ -44,10 +44,11 @@ class MainActivity : ComponentActivity() {
                     val drugViewModel = viewModel<DrugViewModel>()
 
                     MainScreen(
-                        postViewModel,
-                        drugViewModel,
+                        postViewModel = postViewModel,
+                        drugViewModel = drugViewModel,
                         modifier = Modifier.padding(innerPadding)
                     )
+
                 }
             }
         }
