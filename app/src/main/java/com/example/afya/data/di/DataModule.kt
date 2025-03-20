@@ -17,14 +17,13 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun providePostRepository(): PostRepository {
-        return PostRepositoryImpl()
+    fun providePostRepository(postRepositoryImpl: PostRepositoryImpl): PostRepository {
+        return postRepositoryImpl
     }
 
     @Provides
     @Singleton
-    fun provideDrugRepository(): DrugRepository{
-        return DrugRepositoryImpl()
+    fun provideDrugRepository(drugRepositoryImpl: DrugRepositoryImpl): DrugRepository {
+        return drugRepositoryImpl
     }
-
 }
