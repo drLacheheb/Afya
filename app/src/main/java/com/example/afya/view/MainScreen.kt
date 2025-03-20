@@ -29,7 +29,11 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.text.font.FontWeight
-
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.animation.animateContentSize
 
 sealed class Screen(val route: String) {
     object Posts : Screen("posts")
@@ -59,27 +63,41 @@ fun MainScreen(
     Scaffold(
         topBar = {
             if (currentScreen !is Screen.Profile && currentScreen !is Screen.Calls && currentScreen !is Screen.Messages) {
-                Column {
-                    CenterAlignedTopAppBar(
-                        title = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState()) // Enables scrolling
+                        .animateContentSize() // Smooth transition effect
+                        .padding(16.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
                             Text(
                                 text = "Afya",
                                 style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
-                                color =  MaterialTheme.colorScheme.primary,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.fillMaxWidth()
+                                color = MaterialTheme.colorScheme.primary,
+                                fontSize = 50.sp,
+                                fontWeight = FontWeight(900),
+                                fontFamily = FontFamily.Cursive
+                            )
+
+                            Spacer(modifier = Modifier.height(7.dp))
+
+                            Text(
+                                text = "Your Health Is Our Responsibility",
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.ExtraBold,
+                                fontFamily = FontFamily.Cursive
                             )
                         }
-                    )
-                    OutlinedTextField(
-                        value = searchQuery,
-                        onValueChange = { searchQuery = it },
-                        placeholder = { Text("Search...") },
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                    )
+
+                        ProfileButton(profileImageId = R.drawable.profile)
+                    }
+                    SearchBar()
                 }
             }
         },
@@ -174,7 +192,7 @@ fun ProfileScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Profile",
+            text = "MyProfile",
             style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
             color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center,
@@ -390,7 +408,7 @@ fun PostCard(post: Post) {
                     modifier = Modifier
                         .padding(bottom = 8.dp),
                     shape = MaterialTheme.shapes.small,
-                    color = MaterialTheme.colorScheme.secondaryContainer,
+                    color = MaterialTheme.colorScheme.tertiary,
                 ) {
                     Text(
                         text = postType.name,
@@ -433,10 +451,10 @@ fun PostCard(post: Post) {
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     IconButton(onClick = { /* إرسال رسالة */ }) {
-                        Icon(Icons.Filled.Email, contentDescription = "Send Email", tint = Color.White)
+                        Icon(Icons.Filled.Email, contentDescription = "Send Email", tint = Color.Black)
                     }
                     IconButton(onClick = { /* الاتصال */ }) {
-                        Icon(Icons.Filled.Phone, contentDescription = "Call", tint = Color.White)
+                        Icon(Icons.Filled.Phone, contentDescription = "Call", tint = Color.Black)
                     }
                 }
             }

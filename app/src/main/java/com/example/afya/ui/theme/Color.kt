@@ -1,22 +1,29 @@
+
 package com.example.afya.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
 // Light Theme Colors
-val SapphireBlue = Color(0xFF0066CC)       // Primary color - Trustworthy blue
-val CadetBlue = Color(0xFF5F9EA0)          // Secondary color - Professional teal
-val LavenderGray = Color(0xFFE6E6FA)       // Tertiary color - Soft medical purple
+val SapphireBlue  = Color(0xFF6C5CE7)       // Primary color
+val CadetBlue = Color(0xFFA575FF)            // Secondary color
+val TrustTeal = Color(0xFFBF7900)               // Tertiary color
+val LightBackground = Color(0xFFF8F9FA)         // Background
+val DarkText = Color(0xFF2D3436)                // Primary text
 
 // Dark Theme Colors
-val NavyBlue = Color(0xFF003366)           // Dark theme primary - Deep trustworthy blue
-val SteelTeal = Color(0xFF4682B4)          // Dark theme secondary - Muted teal
-val TwilightPurple = Color(0xFF483D8B)     // Dark theme tertiary - Dark lavender
+val DeepPurple = Color(0xFF4B3F72)
+val MutedOrange = Color(0xFFE67E22)
+val DeepTeal = Color(0xFF00897B)
+val DarkBackground = Color(0xFFFD5000)
+val LightText = Color(0xFFE7EAF6)
+
+// Functional Colors
+val SuccessGreen = Color(0xFF00C889)
+val ErrorRed = Color(0xFFD32F2F)
+val WarningYellow = Color(0xFFFFD600)
+val StarRating = Color(0xFFFFC107)
 
 // Neutral Colors
-val MedicalWhite = Color(0xFFF8F9FA)       // Background color - Crisp white
-val SlateGray = Color(0xFF708090)          // Text/icon color - Professional gray
-
-// Accent & Status Colors
-val SafetyGreen = Color(0xFF77DD77)        // Positive/confirmation color
-val CoralRed = Color(0xFFFF6B6B)           // Error/warning (softer than pure red)
-val VitaminC = Color(0xFFFFA500)           // Highlight/attention color
+val NeutralGray = Color(0xFFFFC107)
+val CardSurface = Color(0xFFFDFDFD)            // Light theme cards
+val DarkCardSurface = Color(0xFF1E1E1E)        // Dark theme cards
