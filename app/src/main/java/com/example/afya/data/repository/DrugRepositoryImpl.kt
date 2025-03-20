@@ -3,8 +3,9 @@ package com.example.afya.data.repository
 import com.example.afya.data.model.Drug
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import javax.inject.Inject
 
-class DrugRepositoryImpl : DrugRepository {
+class DrugRepositoryImpl @Inject constructor() : DrugRepository {
     private val _drugs = mutableListOf(
         Drug(
             id = "1",
@@ -52,3 +53,4 @@ class DrugRepositoryImpl : DrugRepository {
 
     override fun getDrugs(): Flow<List<Drug>> = _drugFlow
 }
+

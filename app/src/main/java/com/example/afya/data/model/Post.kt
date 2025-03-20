@@ -1,21 +1,16 @@
 package com.example.afya.data.model
 
-import java.util.Date
-
 data class Post(
     val id: String,
     val title: String,
-    val content: String,
     val drugName: String,
-    val image: String?,
+    val content: String,
     val location: String,
-    val postType: PostType,
-    val createdAt: Date,
-    val updatedAt: Date,
-    val expiredAt: Date
+    val image: String,
+    val postType: PostType,  // الآن يستخدم PostType من data.model فقط
+    val createdAt: Long,
+    val updatedAt: Long,
+    val expiredAt: Long
 )
 
-//enum class PostType {
-//    OFFER,
-//    REQUEST
-//}
+

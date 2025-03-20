@@ -13,6 +13,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.example.afya.data.repository.PostRepository
+
+
+
 
 data class UIState(
     val isLoading: Boolean = false,
@@ -21,30 +25,28 @@ data class UIState(
 )
 
 @HiltViewModel
-class PostViewModel @Inject constructor(private val getPostsUseCase: GetPostsUseCase) : ViewModel() {
-   
- 
+class PostViewModel @Inject constructor(
+    private val getPostsUseCase: GetPostsUseCase,
+    private val postRepository: PostRepository
+) : ViewModel() {
+
     private val _uiState = MutableStateFlow(UIState())
     val uiState: StateFlow<UIState> = _uiState.asStateFlow()
 
-    init{
+    init {
         loadPosts()
     }
 
-
     fun loadPosts() {
-     
         _uiState.value = _uiState.value.copy(isLoading = true)
         viewModelScope.launch {
-
             getPostsUseCase().catch {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     posts = emptyList(),
                     error = "Failed to load posts"
                 )
-            }.collect{ posts ->
-
+            }.collect { posts ->
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     posts = posts,
@@ -53,5 +55,10 @@ class PostViewModel @Inject constructor(private val getPostsUseCase: GetPostsUse
             }
         }
     }
-}
 
+    fun createPost(post: Post) {
+        viewModelScope.launch {
+            postRepository.addPost(post)
+        }
+    }
+}

@@ -52,9 +52,8 @@ fun MainScreen(
 
 
 
-    var currentScreen by remember { mutableStateOf<Screen>(Screen.Posts) }// تتبع الشاشة الحالية
-    var searchQuery by remember { mutableStateOf("") }// تتبع النص المدخل في البحث
-
+    var currentScreen by remember { mutableStateOf<Screen>(Screen.Posts) }
+    var searchQuery by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -122,11 +121,11 @@ fun MainScreen(
             when (currentScreen) {
                 is Screen.Posts -> PostList(
                     posts = posts.posts,
-                    onAddPost = { /* ضع الأكشن المناسب عند الضغط */ }
+                    onAddPost = { }
                 )
                 is Screen.Drugs -> DrugList(
                     drugs = drugs.drugs,
-                    onAddDrug = { /* ضع الإجراء المناسب هنا عند الضغط على زر إضافة دواء */ },)
+                    onAddDrug = { },)
                 is Screen.Profile -> ProfileScreen()
                 is Screen.Messages -> MessagesScreen()
                 is Screen.Calls -> CallsScreen()
@@ -258,7 +257,7 @@ fun ProfileScreen() {
 @Composable
 fun DrugList(drugs: List<Drug>, onAddDrug: () -> Unit, modifier: Modifier = Modifier) {
     Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
-        // زر إضافة دواء جديد
+
         Button(
             onClick = onAddDrug,
             modifier = Modifier
@@ -270,7 +269,7 @@ fun DrugList(drugs: List<Drug>, onAddDrug: () -> Unit, modifier: Modifier = Modi
             Text("Add informations about a drug")
         }
 
-        // قائمة الأدوية
+
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -281,7 +280,7 @@ fun DrugList(drugs: List<Drug>, onAddDrug: () -> Unit, modifier: Modifier = Modi
     }
 }
 
-// بطاقة عرض تفاصيل الدواء
+
 @Composable
 fun DrugCard(drug: Drug) {
     var showContactOptions by remember { mutableStateOf(false) }
@@ -298,7 +297,7 @@ fun DrugCard(drug: Drug) {
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // صورة الدواء
+
             AsyncImage(
                 model = drug.image,
                 contentDescription = "Drug Image",
@@ -309,7 +308,7 @@ fun DrugCard(drug: Drug) {
             )
             Spacer(modifier = Modifier.height(12.dp))
 
-            // اسم الدواء
+
             Text(
                 text = drug.name,
                 style = MaterialTheme.typography.titleLarge,
@@ -318,7 +317,7 @@ fun DrugCard(drug: Drug) {
             )
             Spacer(modifier = Modifier.height(8.dp))
 
-            // تفاصيل الدواء
+
             Text(
                 text = drug.details,
                 style = MaterialTheme.typography.bodyMedium,
@@ -333,7 +332,7 @@ fun DrugCard(drug: Drug) {
 @Composable
 fun PostList(posts: List<Post>, onAddPost: () -> Unit, modifier: Modifier = Modifier) {
     Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
-        // زر إضافة منشور جديد
+
         Button(
             onClick = onAddPost,
             modifier = Modifier
@@ -345,7 +344,7 @@ fun PostList(posts: List<Post>, onAddPost: () -> Unit, modifier: Modifier = Modi
             Text("Add Post")
         }
 
-        // قائمة المنشورات
+
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -356,7 +355,7 @@ fun PostList(posts: List<Post>, onAddPost: () -> Unit, modifier: Modifier = Modi
     }
 }
 
-// بطاقة عرض تفاصيل المنشور
+
 @Composable
 fun PostCard(post: Post) {
     var showContactOptions by remember { mutableStateOf(false) }
@@ -373,7 +372,7 @@ fun PostCard(post: Post) {
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // صورة المنشور
+
             AsyncImage(
                 model = post.image,
                 contentDescription = "Post Image",
@@ -384,7 +383,7 @@ fun PostCard(post: Post) {
             )
             Spacer(modifier = Modifier.height(12.dp))
 
-            // نوع المنشور
+
             post.postType?.let { postType ->
                 Surface(
                     modifier = Modifier
@@ -401,7 +400,7 @@ fun PostCard(post: Post) {
                 }
             }
 
-            // عنوان المنشور
+
             Text(
                 text = post.title,
                 style = MaterialTheme.typography.titleLarge,
@@ -410,7 +409,7 @@ fun PostCard(post: Post) {
             )
             Spacer(modifier = Modifier.height(8.dp))
 
-            // محتوى المنشور
+
             Text(
                 text = post.content,
                 style = MaterialTheme.typography.bodyMedium,
@@ -425,17 +424,17 @@ fun PostCard(post: Post) {
                 Text("Contact")
             }
 
-            // عرض أيقونات التواصل عند الضغط على الزر
+
             if (showContactOptions) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    IconButton(onClick = { /* إرسال رسالة */ }) {
+                    IconButton(onClick = {  }) {
                         Icon(Icons.Filled.Email, contentDescription = "Send Email", tint = Color.White)
                     }
-                    IconButton(onClick = { /* الاتصال */ }) {
+                    IconButton(onClick = {  }) {
                         Icon(Icons.Filled.Phone, contentDescription = "Call", tint = Color.White)
                     }
                 }
