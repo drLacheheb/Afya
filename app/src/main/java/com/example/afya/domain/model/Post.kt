@@ -13,16 +13,16 @@ data class Post(
 ) {
     fun toDataModel(): DataPost {
         return DataPost(
-            id = "",  // أو يمكنك تحديده من مكان آخر إذا كان متاحًا
+            id = "",
             title = title,
             drugName = drugName,
             content = content,
             location = location,
-            image = imageUrl ?: "",  // استبدال `null` بسلسلة فارغة لأن `image` يبدو إلزاميًا
-            postType = postType.toDataModel(),  // تحويل نوع PostType إلى النوع الموجود في `data.model`
-            createdAt = System.currentTimeMillis(), // توفير قيمة افتراضية
-            updatedAt = System.currentTimeMillis(), // توفير قيمة افتراضية
-            expiredAt = System.currentTimeMillis() + (7 * 24 * 60 * 60 * 1000) // مثال: انتهاء بعد 7 أيام
+            image = imageUrl ?: "",
+            postType = postType.toDataModel(),
+            createdAt = System.currentTimeMillis(),
+            updatedAt = System.currentTimeMillis(),
+            expiredAt = System.currentTimeMillis() + (7 * 24 * 60 * 60 * 1000)
         )
     }
 }

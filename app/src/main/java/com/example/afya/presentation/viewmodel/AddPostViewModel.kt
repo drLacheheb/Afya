@@ -3,7 +3,7 @@ package com.example.afya.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.afya.domain.usecase.AddPostUseCase
-import com.example.afya.domain.model.PostType // تأكد من أن PostType موجود داخل model
+import com.example.afya.domain.model.PostType
 import com.example.afya.domain.model.Post
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

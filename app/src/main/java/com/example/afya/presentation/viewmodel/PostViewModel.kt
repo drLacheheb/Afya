@@ -27,7 +27,7 @@ data class UIState(
 @HiltViewModel
 class PostViewModel @Inject constructor(
     private val getPostsUseCase: GetPostsUseCase,
-    private val postRepository: PostRepository  // أضف هذا الحقل
+    private val postRepository: PostRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UIState())
@@ -58,7 +58,7 @@ class PostViewModel @Inject constructor(
 
     fun createPost(post: Post) {
         viewModelScope.launch {
-            postRepository.addPost(post)  // استخدم postRepository بعد تعريفه في الـ Constructor
+            postRepository.addPost(post)
         }
     }
 }

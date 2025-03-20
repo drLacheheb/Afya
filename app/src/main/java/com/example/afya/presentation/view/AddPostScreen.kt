@@ -22,7 +22,7 @@ fun AddPostScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        // حقل العنوان
+
         TextField(
             value = state.title,
             onValueChange = { viewModel.onEvent(AddPostEvent.TitleChanged(it)) },
@@ -32,7 +32,7 @@ fun AddPostScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // حقل اسم الدواء
+
         TextField(
             value = state.drugName,
             onValueChange = { viewModel.onEvent(AddPostEvent.DrugNameChanged(it)) },
@@ -42,7 +42,7 @@ fun AddPostScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // حقل المحتوى
+
         TextField(
             value = state.content,
             onValueChange = { viewModel.onEvent(AddPostEvent.ContentChanged(it)) },
@@ -52,7 +52,7 @@ fun AddPostScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // حقل الموقع
+
         TextField(
             value = state.location,
             onValueChange = { viewModel.onEvent(AddPostEvent.LocationChanged(it)) },
@@ -62,7 +62,7 @@ fun AddPostScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // زر إضافة المنشور
+
         Button(
             onClick = { viewModel.onEvent(AddPostEvent.Submit) },
             enabled = !state.isLoading,
@@ -71,13 +71,13 @@ fun AddPostScreen(
             Text(text = if (state.isLoading) "جارٍ الإضافة..." else "إضافة المنشور")
         }
 
-        // عرض رسالة خطأ إذا وجدت
+
         state.error?.let { error ->
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = error, color = MaterialTheme.colorScheme.error)
         }
 
-        // العودة للشاشة السابقة بعد نجاح الإضافة
+
         LaunchedEffect(state.isSuccess) {
             if (state.isSuccess) {
                 navController.popBackStack()
