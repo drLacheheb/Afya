@@ -21,4 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "Afya"
 include(":app")
+include(":app")
+include(":app")
  

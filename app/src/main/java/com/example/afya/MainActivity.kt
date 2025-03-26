@@ -1,5 +1,48 @@
+
 package com.example.afya
 
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.afya.ui.theme.AfyaTheme
+import com.example.afya.view.MainScreen
+import com.example.afya.viewmodel.DrugViewModel
+import com.example.afya.viewmodel.PostViewModel
+
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            AfyaTheme {
+                Box {
+                    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                        val postViewModel = viewModel<PostViewModel>()
+                        val drugViewModel = viewModel<DrugViewModel>()
+
+                        MainScreen(
+                            postViewModel = postViewModel,
+                            drugViewModel = drugViewModel,
+                            modifier = Modifier.padding(innerPadding),
+                            )
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+/*
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -27,8 +70,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+<<<<<<< HEAD
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.afya.ui.theme.AfyaTheme
+import com.example.afya.presentation.view.MainScreen
+import com.example.afya.presentation.viewmodel.DrugViewModel
+import com.example.afya.presentation.viewmodel.PostViewModel
+import dagger.hilt.android.AndroidEntryPoint
+=======
+import com.example.afya.ui.theme.AfyaTheme
+>>>>>>> 3c8320f66b07010eabaaa9da1b8ac4d702af8f9f
 
+
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,11 +91,18 @@ class MainActivity : ComponentActivity() {
         setContent {
             AfyaTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "drLacheheb!",
+<<<<<<< HEAD
+                    val postViewModel = hiltViewModel<PostViewModel>()
+                    val drugViewModel = hiltViewModel<DrugViewModel>()
+
+                    MainScreen(
+                        postViewModel,
+                        drugViewModel,
                         modifier = Modifier.padding(innerPadding)
                     )
-                    //FirstUI(modifier = Modifier.padding(innerPadding))
+=======
+                    FirstUI(modifier = Modifier.padding(innerPadding))
+>>>>>>> 3c8320f66b07010eabaaa9da1b8ac4d702af8f9f
                 }
             }
         }
@@ -48,45 +110,41 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-/**
- * Main composable function for the UI layout
- * @param modifier Modifier for layout adjustments
- */
-@Composable
 fun FirstUI(modifier: Modifier = Modifier) {
-    // TODO 1: Create state variables for text input and items list
+    // State variables for text input and items list
+    var textValue by remember { mutableStateOf("") }
+    val itemsList = remember { mutableStateListOf<String>() }
+    var searchQuery by remember { mutableStateOf("") }
 
     Column(
         modifier = modifier
-            .padding(25.dp)
+            .padding(16.dp)
             .fillMaxSize()
     ) {
         SearchInputBar(
-            textValue = "", // TODO 2: Connect to state
-            onTextValueChange = { /* TODO 3: Update text state */ },
-            onAddItem = { /* TODO 4: Add item to list */ },
-            onSearch = { /* TODO 5: Implement search functionality */ }
+            textValue = textValue,
+            onTextValueChange = { newValue -> textValue = newValue },
+            onAddItem = {
+                if (textValue.isNotBlank()) {
+                    itemsList.add(textValue)
+                    textValue = ""
+                }
+            },
+            onSearch = { query ->
+                searchQuery = query
+            }
         )
 
-        // TODO 6: Display list of items using CardsList composable
-        CardsList(emptyList())
+        // Display filtered list of items using CardsList composable
+        val filteredList = if (searchQuery.isBlank()) {
+            itemsList
+        } else {
+            itemsList.filter { it.contains(searchQuery, ignoreCase = true) }
+        }
+        CardsList(filteredList)
     }
 }
 
-/**
- * Composable for search and input controls
- * @param textValue Current value of the input field
- * @param onTextValueChange Callback for text changes
- * @param onAddItem Callback for adding new items
- * @param onSearch Callback for performing search
- */
 @Composable
 fun SearchInputBar(
     textValue: String,
@@ -108,35 +166,43 @@ fun SearchInputBar(
                 .padding(vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Button(onClick = { /* TODO 7: Handle add button click */ }) {
+            Button(onClick = { onAddItem(textValue) }) {
                 Text("Add")
             }
 
-            Button(onClick = { /* TODO 8: Handle search button click */ }) {
+            Button(onClick = { onSearch(textValue) }) {
                 Text("Search")
             }
         }
     }
 }
 
-/**
- * Composable for displaying a list of items in cards
- * @param displayedItems List of items to display
- */
 @Composable
-fun CardsList(displayedItems: List<String>) {
-    // TODO 9: Implement LazyColumn to display items
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        // TODO 10: Create cards for each item in the list
-        items(displayedItems) { item ->
+fun CardsList(items: List<String>) {
+    LazyColumn {
+        items(items) { item ->
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
-                Text(text = "Sample Item", modifier = Modifier.padding(16.dp))
+                Text(
+                    text = item,
+                    modifier = Modifier.padding(16.dp)
+                )
             }
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    AfyaTheme {
+        FirstUI()
+    }
+}
+
+
+ */
