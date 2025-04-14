@@ -3,7 +3,7 @@ package com.example.afya.data.model
 import java.util.Date
 
 data class Post(
-    val id: String,
+    val id: String?,
     val title: String,
     val content: String,
     val drugName: String,

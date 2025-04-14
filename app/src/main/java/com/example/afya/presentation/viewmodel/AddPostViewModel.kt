@@ -7,6 +7,7 @@ import com.example.afya.data.model.Post
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,16 +43,16 @@ class AddPostViewModel @Inject constructor(
             try {
                 addPostUseCase(
                     Post(
+                        id = java.util.UUID.randomUUID().toString(),
                         title = currentState.title,
                         drugName = currentState.drugName,
                         content = currentState.content,
                         location = currentState.location,
                         image = currentState.imageUrl, // ✅ التأكد من تمرير imageUrl
                         postType = currentState.postType,
-                        id = TODO(),
-                        createdAt = TODO(),
-                        updatedAt = TODO(),
-                        expiredAt = TODO()
+                        createdAt = Date(),
+                        updatedAt = Date(),
+                        expiredAt = Date()
                     )
                 )
                 _state.value = _state.value.copy(isSuccess = true, isLoading = false)
